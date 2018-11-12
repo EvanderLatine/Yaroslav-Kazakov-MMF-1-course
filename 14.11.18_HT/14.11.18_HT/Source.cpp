@@ -3,14 +3,10 @@
 
 using namespace std;
 
-
-int inputDigit();
+int inputDecimalDigit();
 int inputNumber();
-
 int useSwitch();
-
-
-
+void resultForEachNumber(int);
 
 int main()
 {
@@ -26,8 +22,6 @@ int main()
 	return 0;
 }
 
-
-
 int inputNumber()
 {
 	int num;
@@ -37,7 +31,7 @@ int inputNumber()
 	return num;
 }
 
-int inputDigit()
+int inputDecimalDigit()
 {
 	int symbol;
 	cout << "Setting symbol:\nsymbol =  ";
@@ -46,23 +40,48 @@ int inputDigit()
 	return symbol;
 }
 
-
-
 int useSwitch()
 {
 	switch (inputCase())
 	{
 		case 'a':
 		{
-			return quantityOfSymbol(decimalToBinary(inputNumber()), inputDigit());
+			return quantityOfSymbolForDecimals(decimalToBinary(inputNumber()), inputDecimalDigit());
 			break;
 		}
 
+		case 'b':
+		{
+			return quantityOfSymbolForHexadecimals(inputNumber(), convertHexadecimalToDecimal());
+			break;
+		}
+
+		case 'c':
+		{
+			resultForEachNumber(inputDecimalDigit());
+			break;
+		}
 		default:
 		{
 			break;
 		}
 	}
+}
+
+void resultForEachNumber(int symbol)
+{
+	const int N = 100;
+	int array[N] = { 0 };
+	int n = inputNumber();
+
+	inputArray(n, array);
+
+	for (int i = 0; i < n; i++)
+	{
+		cout << "For number " << array[i] << " & digit " << symbol << ' ';
+		outputResult(quantityOfSymbolForDecimals(decimalToBinary(array[i]), symbol));
+	}
+	
 }
 
 
