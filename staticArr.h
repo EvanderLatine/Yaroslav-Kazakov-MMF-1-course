@@ -1,18 +1,20 @@
 #pragma once
-#include "mat.h"
+#include "string.h"
 
 using namespace std;
 
 void inputArr(int, char*); //dimention of array, array pointer
 void inputArr(int, int*);
-char equalStr(char*, int, char*, int);
-char compareStr(char*, int, char*, int);
+char equalStr(char*, char*);
+int compareStr(char*, char*); // +1 if arr1 < arr2, 0 if arr1 = arr2
 int wordInStr(char*, char*); // string, word	(returns index of string(word) entry in string)
-int wordInStr(char*, int); // string, word length	(returns index of string(word) entry in string)
-void shift(char*, int&, int, int, int); // string, link to string length, index of starting symbol, length of replaced word, length of inserted word
+int wordInStr(char*, int); // string, word length	(returns index of string(word) consisted of n symbols in string)
+void splice(char*, int&, int, int, int); // string, link to string length, index of starting symbol, to delete, to insert
+void shift(char*, int); // array to change, direction and step of shifting ( - left, + right)
 void displayArr(char*, int);
 void displayArr(int*, int);
 void displayArr(char[][N]);
+int abs(int);
 
 void inputArr(int n, char* array)
 {
@@ -38,8 +40,10 @@ void inputArr(int n, int* array)
 	system("cls");
 }
 
-char equalStr(char* arr1, int n, char* arr2, int m)
+char equalStr(char* arr1, char* arr2)
 {
+	int n = getLength(arr1),
+		m = getLength(arr2);
 	bool flag = false;
 
 	if (n == m)
@@ -66,8 +70,10 @@ char equalStr(char* arr1, int n, char* arr2, int m)
 	}
 }
 
-char compareStr(char* arr1, int n, char* arr2, int m)
+int compareStr(char* arr1, char* arr2)
 {
+	int n = getLength(arr1),
+		m = getLength(arr2);
 	int result = 0;
 
 	if (n == m)
@@ -78,38 +84,26 @@ char compareStr(char* arr1, int n, char* arr2, int m)
 		{
 			if (arr1[i] == arr2[i])
 			{
-				result += 1;
+				continue;
 			}
 			else if (arr1[i] < arr2[i])
 			{
-				result += 1;
+				return 1;
 				break;
 			}
 			else
 			{
-				result += 2;
+				return -1;
 				break;
 			}
 			i++;
 		}
-		result -= i;
-	}
-	else
-	{
-		cout << "Arrays have different length";
-	}
 
-	if (!result)
-	{
-		return '=';
-	}
-	else if (result == 1)
-	{
-		return '<';
+		return result;
 	}
 	else
 	{
-		return '>';
+		cout << "Strings have different length\n";
 	}
 }
 
@@ -166,47 +160,47 @@ int wordInStr(char* arr1, int m)
 	return -1;
 }
 
-void shift(char* target, int& n, int wordIndex, int m, int k = 0)
+void splice(char* target, int& n, int wordIndex, int m, int k = 0)
 {
-	int shift = abs(k - m);
+	int splice = abs(k - m);
 
 	if (k > m)
 	{
 		for (int i = n - 1; i >= wordIndex + m; i--)
 		{
-			target[i + shift] = target[i];
+			target[i + splice] = target[i];
 		}
-		n += shift;
+		n += splice;
 	}
 	else if (k < m)
 	{
 		for (int i = wordIndex + m; i <= n; i++)
 		{
-			target[i - shift] = target[i];
+			target[i - splice] = target[i];
 		}
-		n -= shift;
+		n -= splice;
 	}
 }
 
 void displayArr(char* arr)
 {
-	for (int i = 0, n = getLength(arr); i < n; i++)
+	for (int i = 0; i < getLength(arr); i++)
 	{
 		cout << arr[i];
 	}
 	cout << endl;
 }
 
-void displayArr(int* arr, int n)
+void displayArr(int* arr)
 {
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < getLength(arr); i++)
 	{
 		cout << arr[i] << ' ';
 	}
 	cout << endl;
 }
 
-void displayArr(char matrix[][N] )
+void displayArr(char matrix[][N])
 {
 	int n = 0;
 
@@ -221,6 +215,55 @@ void displayArr(char matrix[][N] )
 		}
 		cout << endl;
 		n++;
-		m = 0;
+	}
+}
+
+int abs(int n)
+{
+	if (n > 0)
+	{
+		return n;
+	}
+	else
+	{
+		return n * (-1);
+	}
+}
+
+void shift(char* arr, int n)
+{
+	int length = getLength(arr);
+
+	if (n > 0)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			int j = 0;
+			char last = arr[n - 1];
+
+			while (j < length - 2)
+			{
+				arr[j + 1] = arr[j];
+				j++;
+			}
+
+			arr[0] = last;
+		}
+	}
+	else
+	{
+		for (int i = 0; i < -n; i++)
+		{
+			int j = length;
+			char first = arr[0];
+
+			while (j > 0)
+			{
+				arr[j - 2] = arr[j - 1];
+				j--;
+			}
+
+			arr[length] = first;
+		}
 	}
 }

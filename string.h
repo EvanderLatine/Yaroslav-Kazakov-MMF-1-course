@@ -13,7 +13,9 @@ char toUpper(char);
 int substringPosition(char*, char*);
 void wordsInStr(char*, char[][N]);
 void swap(char*);
+void swap(int*);
 void swap(char&, char&);
+void swap(int&, int&);
 
 int getLength(char* source)
 {
@@ -144,9 +146,27 @@ void swap(char* arr)
 	}
 }
 
+void swap(int* arr)
+{
+	int length = getLength(arr);
+
+	for (int i = 0; i < length / 2; i++)
+	{
+		swap(arr[i], arr[length - 1 - i]);
+	}
+}
+
 void swap(char& left, char& right)
 {
 	left += right;
 	right = left - right;
 	left -= right;
 }
+
+void swap(int& left, int& right)
+{
+	left += right;
+	right = left - right;
+	left -= right;
+}
+
